@@ -15,7 +15,7 @@ func main() {
 	captureErr := bufio.NewWriter(&errorBytes)
 
 	if len(os.Args) < 2 {
-		log.Fatal("Error: please provide a target file path for your gofile.")
+		log.Fatal("Error: please provide a target gofile path.\nUsage: okrun <path/to/file.go> [arg]*")
 	}
 	targetPath := os.Args[1]
 
