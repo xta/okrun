@@ -62,13 +62,6 @@ func buildHandleables(lines []string) (errors []unusedImportError) {
 
 func fixErrors(errors []unusedImportError) error {
 	for _, anUnusedImportError := range errors {
-
-		file, err := os.Open(anUnusedImportError.filePath)
-		if err != nil {
-			return err
-		}
-		defer file.Close()
-
 		lines, err := readLines(anUnusedImportError.filePath)
 		if err != nil {
 			return err
