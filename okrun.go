@@ -37,10 +37,19 @@ func main() {
 		cmd.Wait()
 		captureErr.Flush()
 
-		addressableErrors := handleErrors(errorBytes.String())
+		handleableErrors, unhandleableLines := handleErrors(errorBytes.String())
 
-		if len(addressableErrors) > 0 {
-			fixErrors(addressableErrors)
+		if len(unhandleableLines) > 0 {
+			rerunTargetFile = false
+
+			errorMsg := "Error: the following errors cannot be automatically corrected by okrun to run your file:\n"
+			for i := 0; i < len(unhandleableLines); i++ {
+				errorMsg = errorMsg + "* " + unhandleableLines[i] + "\n"
+			}
+			errorMsg = errorMsg + "Please fix the error(s) listed above and then use okrun."
+			log.Fatal(errorMsg)
+		} else if len(handleableErrors) > 0 {
+			fixErrors(handleableErrors)
 		} else {
 			rerunTargetFile = false
 		}

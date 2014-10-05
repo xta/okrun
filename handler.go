@@ -15,23 +15,32 @@ type unusedImportError struct {
 }
 
 // handleErrors handles/fixes error(s) if it can in the gofile
-func handleErrors(body string) (unusedImportErrors []unusedImportError) {
-	fixableErrors := errorLines(body)
-	unusedImportErrors = processLines(fixableErrors)
+func handleErrors(body string) (handleable []unusedImportError, unhandleableLines []string) {
+	handleableLines, unhandleableLines := distinguishLines(body)
+	if len(unhandleableLines) == 0 {
+		handleable = buildHandleables(handleableLines)
+	}
 	return
 }
 
-func errorLines(body string) (lines []string) {
+func distinguishLines(body string) (handleableLines, unhandleableLines []string) {
 	allLines := strings.Split(body, "\n")
 	for _, lineValue := range allLines {
-		if strings.Contains(lineValue, "imported and not used") {
-			lines = append(lines, lineValue)
+		lineValue = strings.TrimSpace(lineValue)
+		if len(lineValue) == 0 {
+			// empty line, do nothing
+		} else if strings.HasPrefix(lineValue, "#") {
+			// comment line, do nothing
+		} else if strings.Contains(lineValue, "imported and not used") {
+			handleableLines = append(handleableLines, lineValue)
+		} else {
+			unhandleableLines = append(unhandleableLines, lineValue)
 		}
 	}
 	return
 }
 
-func processLines(lines []string) (errors []unusedImportError) {
+func buildHandleables(lines []string) (errors []unusedImportError) {
 	for _, line := range lines {
 		sections := strings.Split(line, ":")
 
