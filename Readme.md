@@ -2,6 +2,8 @@
 
 ok, run your gofile. run your gofile when `go run` would not.
 
+[![GoDoc](https://godoc.org/github.com/xta/okrun?status.svg)](https://godoc.org/github.com/xta/okrun)
+
 ### Setup
     // get okrun
     go get github.com/xta/okrun
