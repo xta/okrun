@@ -17,7 +17,8 @@ func main() {
 	if len(os.Args) < 2 {
 		log.Fatal("Error: please provide a target gofile path.\nUsage: okrun <path/to/file.go> [arg]*")
 	}
-	targetPath := os.Args[1]
+	commandArgs := []string{"run"}
+	commandArgs = append(commandArgs, os.Args[1:]...)
 
 	for rerunTargetFile {
 		if !rerunTargetFile {
@@ -26,7 +27,7 @@ func main() {
 
 		errorBytes.Reset()
 
-		cmd := exec.Command("go", "run", targetPath)
+		cmd := exec.Command("go", commandArgs...)
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = captureErr
 		err := cmd.Start()
