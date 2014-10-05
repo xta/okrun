@@ -5,6 +5,7 @@ import (
 	"os/exec"
 )
 
+// formatFile is a gofmt runner
 func formatFile(filePath string) error {
 	cmd := exec.Command("gofmt", "-w", filePath)
 	cmd.Stdout = os.Stdout
