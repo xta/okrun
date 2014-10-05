@@ -4,8 +4,8 @@ just run your gofile
 
 ### Setup
 
-    go build justrun.go
+    go build
 
 ### Usage
 
-    ./justrun test/test.go
+    ./just-run-go test/test.go

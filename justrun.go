@@ -114,9 +114,9 @@ func fixErrors(errors []unusedImportError) (success bool) {
 			log.Fatalf("writeLines: %s", err)
 			return false
 		}
-
-		// go fmt updated file(s)
+		formatFile(anUnusedImportError.filePath)
 	}
+
 	return true
 }
 
