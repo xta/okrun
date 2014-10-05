@@ -40,18 +40,23 @@ func main() {
 		handleableErrors, unhandleableLines := handleErrors(errorBytes.String())
 
 		if len(unhandleableLines) > 0 {
-			rerunTargetFile = false
-
-			errorMsg := "Error: the following errors cannot be automatically corrected by okrun to run your file:\n"
-			for i := 0; i < len(unhandleableLines); i++ {
-				errorMsg = errorMsg + "* " + unhandleableLines[i] + "\n"
-			}
-			errorMsg = errorMsg + "Please fix the error(s) listed above and then use okrun."
+			errorMsg := unhandleableLinesMessage(unhandleableLines)
 			log.Fatal(errorMsg)
 		} else if len(handleableErrors) > 0 {
-			fixErrors(handleableErrors)
+			if err = fixErrors(handleableErrors); err != nil {
+				log.Fatal("Error: okrun encountered an error while fixing errors.", err)
+			}
 		} else {
 			rerunTargetFile = false
 		}
 	}
+}
+
+func unhandleableLinesMessage(lines []string) string {
+	errorMsg := "Error: the following errors cannot be automatically corrected by okrun to run your file:\n"
+	for i := 0; i < len(lines); i++ {
+		errorMsg = errorMsg + "* " + lines[i] + "\n"
+	}
+	errorMsg = errorMsg + "Please fix the error(s) listed above and then use okrun."
+	return errorMsg
 }

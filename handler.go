@@ -3,7 +3,6 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"log"
 	"os"
 	"strconv"
 	"strings"
@@ -61,33 +60,30 @@ func buildHandleables(lines []string) (errors []unusedImportError) {
 	return
 }
 
-func fixErrors(errors []unusedImportError) (success bool) {
+func fixErrors(errors []unusedImportError) error {
 	for _, anUnusedImportError := range errors {
 
 		file, err := os.Open(anUnusedImportError.filePath)
 		if err != nil {
-			log.Fatal(err)
-			return false
+			return err
 		}
 		defer file.Close()
 
 		lines, err := readLines(anUnusedImportError.filePath)
 		if err != nil {
-			log.Fatalf("readLines: %s", err)
-			return false
+			return err
 		}
 
 		linesPosition := anUnusedImportError.fileLine - 1
 		lines[linesPosition] = "//" + lines[linesPosition]
 
 		if err := writeLines(lines, anUnusedImportError.filePath); err != nil {
-			log.Fatalf("writeLines: %s", err)
-			return false
+			return err
 		}
 		formatFile(anUnusedImportError.filePath)
 	}
 
-	return true
+	return nil
 }
 
 func readLines(path string) ([]string, error) {
