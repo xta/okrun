@@ -1,11 +1,63 @@
-# Just Run (golang)
+# OK Run (golang)
 
-just run your gofile
+ok, run your gofile. run your gofile when `go run` would not.
 
 ### Setup
+    // get okrun
+    go get github.com/xta/okrun
 
-    go build
+    // install okrun
+    cd $GOPATH && go install github.com/xta/okrun/
 
 ### Usage
+    okrun path/to/your/file.go
 
-    ./just-run-go test/test.go
+By using `okrun`, your `file.go` will attempt to run when `go run` would otherwise refuse.
+
+### Example
+
+With file *example.go*:
+
+    package main
+
+    import (
+      "fmt"
+      "log"
+    )
+
+    func main() {
+      fmt.Println("hi")
+    }
+
+`go run` will not run *example.go*:
+
+    go run example.go
+    # command-line-arguments
+    example.go:5: imported and not used: "log"
+
+`okrun` will run *example.go*:
+
+    okrun example.go
+    hi
+    
+`okrun` will update your gofile & properly format it. after running `okrun`, *example.go* is now:
+
+    package main
+
+    import (
+      "fmt"
+      //  "log"
+    )
+
+    func main() {
+      fmt.Println("hi")
+    }
+
+
+## About
+
+by [Rex Feng](https://twitter.com/rexfeng) 2014
+
+## License
+
+MIT
