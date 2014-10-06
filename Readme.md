@@ -4,6 +4,11 @@ ok, run your gofile. run your gofile when `go run` would not.
 
 [![GoDoc](https://godoc.org/github.com/xta/okrun?status.svg)](https://godoc.org/github.com/xta/okrun)
 
+### Features
+`okrun` will automatically fix the following error(s):
+
+* *imported and not used* - when your gofile contains an imported package that is not used, `okrun` will comment out the offending import line.
+
 ### Setup
     // get okrun
     go get github.com/xta/okrun
